@@ -301,21 +301,21 @@ export const Tools: React.FC<ToolsProps> = (props) => {
                   flexDirection: "row",
                   alignItems: "center"
                 }}>
-                  {" "}
-                  {record.logo.split(".").pop().includes("svg") ? (
-                    <embed
-                      src={`/api/img?url=${record.logo}`}
-                      width={32}
-                      height={32}
-                      type="image/svg+xml"
-                    />
-                  ) : (
-                    <img
-                      src={`/api/img?url=${record.logo}`}
-                      width={32}
-                      height={32}
-                    ></img>
-                  )}
+                  {/*{" "}*/}
+                  {/*{record.logo.split(".").pop().includes("svg") ? (*/}
+                  {/*  <embed*/}
+                  {/*    src={`/api/img?url=${record.logo}`}*/}
+                  {/*    width={32}*/}
+                  {/*    height={32}*/}
+                  {/*    type="image/svg+xml"*/}
+                  {/*  />*/}
+                  {/*) : (*/}
+                  {/*  <img*/}
+                  {/*    src={`/api/img?url=${record.logo}`}*/}
+                  {/*    width={32}*/}
+                  {/*    height={32}*/}
+                  {/*  ></img>*/}
+                  {/*)}*/}
                   <span style={{ marginLeft: 8 }}>{record.name}</span>
                 </div>
               );

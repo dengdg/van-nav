@@ -75,7 +75,7 @@ export const Setting: React.FC<SettingProps> = (props) => {
             labelCol={{ span: 6 }}
             form={settingForm}
           >
-            <Form.Item
+           {/* <Form.Item
               label="网站 logo"
               name="favicon"
               tooltip="输入 logo 的 url，仅支持 png 或 svg 格式"
@@ -84,7 +84,7 @@ export const Setting: React.FC<SettingProps> = (props) => {
 
             >
               <Input placeholder="请输入网站 logo"></Input>
-            </Form.Item>
+            </Form.Item>*/}
             <Form.Item
               label="网站标题"
               name="title"
