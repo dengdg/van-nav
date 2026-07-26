@@ -1,0 +1,11 @@
+[registry."docker.io"]
+mirrors = ["https://docker.m.daocloud.io", "https://docker.mirrors.ustc.edu.cn",
+    "https://hub-mirror.c.163.com",
+    "https://mirror.aliyuncs.com",
+    "https://1os90eyn.mirror.aliyuncs.com",
+    "https://mirror.baidubce.com"]
+
+# 放开网络权限，允许访问宿主机代理
+insecure-entitlements = ["network.host"]
+
+debug = true

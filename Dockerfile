@@ -1,4 +1,4 @@
-FROM node:18-alpine AS fe-builder
+FROM --platform=$BUILDPLATFORM node:18-alpine AS fe-builder
 WORKDIR /app
 # RUN apk add --no-cache g++ gcc make python3
 COPY . .
@@ -14,7 +14,7 @@ RUN cp -r ui/admin/dist/* public/admin/
 RUN sed -i 's/\/assets/\/admin\/assets/g' public/admin/index.html
 
 
-FROM golang:alpine AS binary-builder
+FROM --platform=$BUILDPLATFORM golang:alpine AS binary-builder
 RUN apk --no-cache --no-progress add  git
 WORKDIR /app
 COPY . .
@@ -23,7 +23,7 @@ RUN cd /app && ls -la && go mod tidy && go build .
 
 
 
-FROM alpine:latest
+FROM --platform=$BUILDPLATFORM alpine:latest
 ENV TZ="Asia/Shanghai"
 RUN apk --no-cache --no-progress add \
     ca-certificates \
