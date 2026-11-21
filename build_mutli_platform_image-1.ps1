@@ -10,12 +10,27 @@ $env:HTTPS_PROXY="http://127.0.0.1:7890"
 $env:ALL_PROXY="socks5://127.0.0.1:7890"
 
 $IMAGE_NAME = "van-nav"
-$IMAGE_TAG = "0.0.3"
 $DOCKER_HUB_USER_NAME = "dengdg"
 $PLATFORMS = "linux/amd64,linux/arm64"
 $PLATFORMS_ARM64 = "linux/arm64"
 $PLATFORMS_AMD64 = "linux/amd64"
 # ======================================================
+
+# 版本号取自 version.txt（可用环境变量 IMAGE_TAG 覆盖）
+if (-not $env:IMAGE_TAG) {
+    $versionFile = Join-Path $PSScriptRoot "version.txt"
+    if (-not (Test-Path $versionFile)) {
+        Write-Host "❌ 未找到 version.txt：$versionFile" -ForegroundColor Red
+        exit 1
+    }
+    $env:IMAGE_TAG = (Get-Content $versionFile -Raw).Trim()
+}
+$IMAGE_TAG = $env:IMAGE_TAG
+if (-not $IMAGE_TAG) {
+    Write-Host "❌ version.txt 中的版本号为空" -ForegroundColor Red
+    exit 1
+}
+
 $FULL_VERSION_TAG = "${DOCKER_HUB_USER_NAME}/${IMAGE_NAME}:${IMAGE_TAG}"
 $FULL_LATEST_TAG = "${DOCKER_HUB_USER_NAME}/${IMAGE_NAME}:latest"
 
@@ -36,21 +51,26 @@ docker login
 Write-Host "`n[步骤2] 初始化多架构构建器buildx" -ForegroundColor Yellow
 $builderCheck = docker buildx ls | Select-String "mybuilder"
 if (-not $builderCheck) {
-    Write-Host "不存在 mybuilder“
+    Write-Host "不存在 mybuilder"
     docker buildx create --name mybuilder --use --bootstrap
 }
 docker buildx use mybuilder
 
 # 多平台构建并直接推送
 Write-Host "`n[步骤3] 多架构构建并推送镜像至DockerHub" -ForegroundColor Yellow
-#    --pull=false `
-#    --push `
-#    --load `
-
 docker buildx build `
+    --builder mybuilder `
     --platform $PLATFORMS `
     -t $FULL_VERSION_TAG `
     -t $FULL_LATEST_TAG `
     --progress=plain `
     --push `
     .
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "`n❌ 构建或推送失败，请检查日志！" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "`n✅ 构建&推送完成！" -ForegroundColor Green
+Write-Host "  版本镜像: $FULL_VERSION_TAG"
+Write-Host "  latest:   $FULL_LATEST_TAG"

@@ -18,16 +18,18 @@ RUN sed -i 's/\/assets/\/admin\/assets/g' public/admin/index.html
 
 
 FROM --platform=$BUILDPLATFORM golang:alpine AS binary-builder
+ARG TARGETOS
+ARG TARGETARCH
 ENV GOPROXY=https://goproxy.cn,direct \
     GOSUMDB=off
 RUN apk --no-cache --no-progress add git
 WORKDIR /app
 COPY . .
 COPY --from=fe-builder /app/public /app/public
-RUN cd /app && ls -la && go mod tidy && go build .
+RUN cd /app && ls -la && go mod tidy && GOOS=$TARGETOS GOARCH=$TARGETARCH go build .
 
 
-FROM --platform=$BUILDPLATFORM alpine:latest
+FROM alpine:latest
 ENV TZ="Asia/Shanghai"
 RUN apk --no-cache --no-progress add \
     ca-certificates \

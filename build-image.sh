@@ -45,10 +45,10 @@ if [ "$SKIP_PUSH" = "1" ]; then
   echo "[3/3] 本地镜像已就绪："
   docker images "${IMAGE_NAME}"
 else
-  echo "[1/3] 登录 DockerHub"
+  echo "[1/2] 登录 DockerHub"
   docker login
 
-  echo "[2/3] 多架构构建并推送"
+  echo "[2/2] 多架构构建并推送"
   docker buildx build \
     --builder mybuilder \
     --platform "$PLATFORMS" \
@@ -58,7 +58,7 @@ else
     --push \
     .
 
-  echo "[3/3] 完成"
+  echo "完成"
   echo "  版本镜像: $FULL_IMAGE"
   echo "  latest:   $LATEST_IMAGE"
 fi
