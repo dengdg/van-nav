@@ -1,11 +1,17 @@
+# Docker Hub 加速（国内常用可用镜像）
 [registry."docker.io"]
 mirrors = ["https://docker.m.daocloud.io", "https://docker.mirrors.ustc.edu.cn",
     "https://hub-mirror.c.163.com",
     "https://mirror.aliyuncs.com",
     "https://1os90eyn.mirror.aliyuncs.com",
-    "https://mirror.baidubce.com"]
+    "https://mirror.baidubce.com",
+    "https://docker.m.daocloud.io",
+    "https://dockerproxy.com",
+    "https://hub.rat.dev",
+    "https://mirror.baidubce.com",
+]
 
-# 放开网络权限，允许访问宿主机代理
+# 允许构建容器访问宿主机网络（代理等）
 insecure-entitlements = ["network.host"]
 
 debug = true
